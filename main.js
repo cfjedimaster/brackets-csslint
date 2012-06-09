@@ -1,5 +1,5 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global define, brackets, $, window */
+/*global define, brackets, $, window, CSSLint */
 
 define(function (require, exports, module) {
     'use strict';
@@ -13,9 +13,50 @@ define(function (require, exports, module) {
     
     //commands
     var VIEW_HIDE_CSSLINT = "csslint.run";
+    
+    function _handleLint() {
+        var messages, results;
+        
+        var editor = EditorManager.getCurrentFullEditor();
+        var text = editor.document.getText();
+        results = CSSLint.verify(text);
+        messages = results.messages;
+        if (results.messages.length) {
+
+            var $csslintTable = $("<table class='zebra-striped condensed-table'>").append("<tbody>");
+            $("<tr><th>Line</th><th>Declaration</th><th>Type</th><th>Message</th></tr>").appendTo($csslintTable);
+
+            results.messages.forEach(function (item) {
+                var makeCell = function (content) {
+                    return $("<td/>").html(content);
+                };
+
+                //sometimes line is blank, as is evidence
+                if (!item.line) { item.line = ""; }
+                if (!item.evidence) { item.evidence = ""; }
+                
+                var $row = $("<tr/>")
+                            .append(makeCell(item.line))
+                            .append(makeCell(item.evidence))
+                            .append(makeCell(item.type))
+                            .append(makeCell(item.message))
+                            .appendTo($csslintTable);
+
+            });
+
+            $("#csslint .table-container")
+                .empty()
+                .append($csslintTable);
+                
+        } else {
+            //todo - tell the user no issues
+            $("#csslint .table-container")
+                .empty()
+                .append("<p>No issues.</p>");
+        }
+    }
 
     function _handleShowCSSLint() {
-        console.log("Running _handleShowCSSlint");    
         var $csslint = $("#csslint");
         
         if ($csslint.css("display") === "none") {
@@ -28,48 +69,6 @@ define(function (require, exports, module) {
         }
         EditorManager.resizeEditor();
 
-    }
-    
-    function _handleLint() {
-        var messages, results;
-        
-        console.log("Running _handleLint()");
-        var editor = EditorManager.getCurrentFullEditor();
-        var text = editor.document.getText();
-console.dir(editor);
-        results = CSSLint.verify(text);
-        messages = results.messages;
-        if(results.messages.length) {
-
-            var $csslintTable = $("<table class='zebra-striped condensed-table'>").append("<tbody>");
-            $("<tr><th>Line</th><th>Declaration</th><th>Type</th><th>Message</th></tr>").appendTo($csslintTable);
-
-            results.messages.forEach(function (item) {
-                var makeCell = function (content) {
-                    return $("<td/>").html(content);
-                };
-
-                //sometimes line is blank, as is evidence
-                if(!item.line) item.line = "";
-                if(!item.evidence) item.evidence="";
-                
-                var $row = $("<tr/>")
-                            .append(makeCell(item.line))
-                            .append(makeCell(item.evidence))
-                            .append(makeCell(item.type))
-                            .append(makeCell(item.message))
-                            .appendTo($csslintTable);
-
-            });
-
-            $("#csslint .table-container")
-            .empty()
-            .append($csslintTable);
-                
-        } else {
-         console.log("no csslint issues");   
-        }
-        console.dir(results);
     }
     
     CommandManager.register("Enable CSSLint", VIEW_HIDE_CSSLINT, _handleShowCSSLint);
