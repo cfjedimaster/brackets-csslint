@@ -22,6 +22,7 @@ define(function (require, exports, module) {
         var text = editor.document.getText();
         results = CSSLint.verify(text);
         messages = results.messages;
+                
         if (results.messages.length) {
 
             var $csslintTable = $("<table class='zebra-striped condensed-table'>").append("<tbody>");
@@ -64,12 +65,11 @@ define(function (require, exports, module) {
             $csslint.show();
             CommandManager.get(VIEW_HIDE_CSSLINT).setName("Disable CSSLint");
             _handleLint();
-            $(DocumentManager).on("currentDocumentChange", _handleLint);
-
+            $(DocumentManager).on("currentDocumentChange documentSaved", _handleLint);
         } else {
             $csslint.hide();
             CommandManager.get(VIEW_HIDE_CSSLINT).setName("Enable CSSLint");
-            $(DocumentManager).off("currentDocumentChange", null,  _handleLint);
+            $(DocumentManager).off("currentDocumentChange documentSaved", null,  _handleLint);
         }
         EditorManager.resizeEditor();
 
