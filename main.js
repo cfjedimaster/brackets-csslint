@@ -7,6 +7,7 @@ define(function (require, exports, module) {
     var Commands                = brackets.getModule("command/Commands"),
         CommandManager          = brackets.getModule("command/CommandManager"),
         EditorManager           = brackets.getModule("editor/EditorManager"),
+        DocumentManager         = brackets.getModule("document/DocumentManager"),
         Menus                   = brackets.getModule("command/Menus");
 
     require("csslint/csslint");
@@ -63,9 +64,12 @@ define(function (require, exports, module) {
             $csslint.show();
             CommandManager.get(VIEW_HIDE_CSSLINT).setName("Disable CSSLint");
             _handleLint();
+            $(DocumentManager).on("currentDocumentChange", _handleLint);
+
         } else {
             $csslint.hide();
             CommandManager.get(VIEW_HIDE_CSSLINT).setName("Enable CSSLint");
+            $(DocumentManager).off("currentDocumentChange", null,  _handleLint);
         }
         EditorManager.resizeEditor();
 
