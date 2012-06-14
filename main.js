@@ -19,6 +19,10 @@ define(function (require, exports, module) {
         var messages, results;
         
         var editor = EditorManager.getCurrentFullEditor();
+        if (!editor) {
+            _handleShowCSSLint();
+            return;
+        }
         var text = editor.document.getText();
         results = CSSLint.verify(text);
         messages = results.messages;
