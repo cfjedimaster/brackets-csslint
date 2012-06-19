@@ -32,6 +32,8 @@ define(function (require, exports, module) {
             var $csslintTable = $("<table class='zebra-striped condensed-table'>").append("<tbody>");
             $("<tr><th>Line</th><th>Declaration</th><th>Type</th><th>Message</th></tr>").appendTo($csslintTable);
 
+            var $selectedRow;
+            
             results.messages.forEach(function (item) {
                 var makeCell = function (content) {
                     return $("<td/>").html(content);
@@ -40,13 +42,25 @@ define(function (require, exports, module) {
                 //sometimes line is blank, as is evidence
                 if (!item.line) { item.line = ""; }
                 if (!item.evidence) { item.evidence = ""; }
-                
+
                 var $row = $("<tr/>")
                             .append(makeCell(item.line))
                             .append(makeCell(item.evidence))
                             .append(makeCell(item.type))
                             .append(makeCell(item.message))
                             .appendTo($csslintTable);
+
+                $row.click(function () {
+                    if ($selectedRow) {
+                        $selectedRow.removeClass("selected");
+                    }
+                    $row.addClass("selected");
+                    $selectedRow = $row;
+
+                    var editor = EditorManager.getCurrentFullEditor();
+                    editor.setCursorPos(item.line - 1, item.col - 1);
+                    EditorManager.focusEditor();
+                });
 
             });
 
@@ -67,12 +81,12 @@ define(function (require, exports, module) {
         
         if ($csslint.css("display") === "none") {
             $csslint.show();
-            CommandManager.get(VIEW_HIDE_CSSLINT).setName("Disable CSSLint");
+            CommandManager.get(VIEW_HIDE_CSSLINT).setChecked(true);
             _handleLint();
             $(DocumentManager).on("currentDocumentChange documentSaved", _handleLint);
         } else {
             $csslint.hide();
-            CommandManager.get(VIEW_HIDE_CSSLINT).setName("Enable CSSLint");
+            CommandManager.get(VIEW_HIDE_CSSLINT).setChecked(false);
             $(DocumentManager).off("currentDocumentChange documentSaved", null,  _handleLint);
         }
         EditorManager.resizeEditor();
