@@ -107,7 +107,7 @@ define(function (require, exports, module) {
         $('#csslint').hide();
         
         var menu = Menus.getMenu(Menus.AppMenuBar.VIEW_MENU);
-        menu.addMenuItem("menu-csslint-view", VIEW_HIDE_CSSLINT, "", Menus.AFTER, "menu-view-sidebar");
+        menu.addMenuItem(VIEW_HIDE_CSSLINT, "", Menus.AFTER, "menu-view-sidebar");
 
         $('#csslint .close').click(function () {
             CommandManager.execute(VIEW_HIDE_CSSLINT);
