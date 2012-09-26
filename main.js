@@ -15,11 +15,6 @@ define(function (require, exports, module) {
     //commands
     var VIEW_HIDE_CSSLINT = "csslint.run";
     
-    //Credit http://css-tricks.com/snippets/javascript/htmlentities-for-javascript/
-    function htmlEntities(str) {
-        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
     function _handleLint() {
         var messages, results;
         
@@ -41,7 +36,7 @@ define(function (require, exports, module) {
             
             results.messages.forEach(function (item) {
                 var makeCell = function (content) {
-                    return $("<td style='word-wrap: break-word' />").html(content);
+                    return $("<td style='word-wrap: break-word' />").text(content);
                 };
 
                 //sometimes line is blank, as is evidence
@@ -52,7 +47,7 @@ define(function (require, exports, module) {
                             .append(makeCell(item.line))
                             .append(makeCell(item.evidence))
                             .append(makeCell(item.type))
-                            .append(makeCell(htmlEntities(item.message)))
+                            .append(makeCell(item.message))
                             .appendTo($csslintTable);
                 $row.click(function () {
                     if ($selectedRow) {
