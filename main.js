@@ -15,6 +15,11 @@ define(function (require, exports, module) {
     //commands
     var VIEW_HIDE_CSSLINT = "csslint.run";
     
+    //Credit http://css-tricks.com/snippets/javascript/htmlentities-for-javascript/
+    function htmlEntities(str) {
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     function _handleLint() {
         var messages, results;
         
@@ -29,14 +34,14 @@ define(function (require, exports, module) {
                 
         if (results.messages.length) {
 
-            var $csslintTable = $("<table class='zebra-striped condensed-table'>").append("<tbody>");
+            var $csslintTable = $("<table class='zebra-striped condensed-table' style='table-layout: fixed; width: 100%'>").append("<tbody>");
             $("<tr><th>Line</th><th>Declaration</th><th>Type</th><th>Message</th></tr>").appendTo($csslintTable);
 
             var $selectedRow;
             
             results.messages.forEach(function (item) {
                 var makeCell = function (content) {
-                    return $("<td/>").html(content);
+                    return $("<td style='word-wrap: break-word' />").html(content);
                 };
 
                 //sometimes line is blank, as is evidence
@@ -47,9 +52,8 @@ define(function (require, exports, module) {
                             .append(makeCell(item.line))
                             .append(makeCell(item.evidence))
                             .append(makeCell(item.type))
-                            .append(makeCell(item.message))
+                            .append(makeCell(htmlEntities(item.message)))
                             .appendTo($csslintTable);
-
                 $row.click(function () {
                     if ($selectedRow) {
                         $selectedRow.removeClass("selected");
