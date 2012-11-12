@@ -6,6 +6,7 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[11/12/2012] Update code to properly insert the content over the status bar. Also made it resizable.  
 [9/26/2012] Escape HTML in the message. Fix width issue. Thanks to Randy Edmunds for the reports.
 
 Per feedback from Narciso Jaramillo, I use a checkbox to show enabled/disabled status and move to the item when you click a row.

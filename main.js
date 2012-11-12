@@ -8,7 +8,9 @@ define(function (require, exports, module) {
         CommandManager          = brackets.getModule("command/CommandManager"),
         EditorManager           = brackets.getModule("editor/EditorManager"),
         DocumentManager         = brackets.getModule("document/DocumentManager"),
-        Menus                   = brackets.getModule("command/Menus");
+        Menus                   = brackets.getModule("command/Menus"),
+        Resizer                 = brackets.getModule("utils/Resizer");
+
 
     require("csslint/csslint");
     
@@ -97,12 +99,15 @@ define(function (require, exports, module) {
     function init() {
         
         //add the HTML UI
-        $('.content').append('  <div id="csslint" class="bottom-panel">'
+        var content = '  <div id="csslint" class="bottom-panel">'
                              + '  <div class="toolbar simple-toolbar-layout">'
                              + '    <div class="title">CSSLint</div><a href="#" class="close">&times;</a>'
                              + '  </div>'
                              + '  <div class="table-container"/>'
-                             + '</div>');
+                             + '</div>';
+
+        $(content).insertBefore("#status-bar");
+
         $('#csslint').hide();
         
         var menu = Menus.getMenu(Menus.AppMenuBar.VIEW_MENU);
@@ -111,6 +116,10 @@ define(function (require, exports, module) {
         $('#csslint .close').click(function () {
             CommandManager.execute(VIEW_HIDE_CSSLINT);
         });
+
+        // AppInit.htmlReady() has already executed before extensions are loaded
+        // so, for now, we need to call this ourself
+        Resizer.makeResizable($('#csslint').get(0), "vert", "top", 200);
 
     }
     
