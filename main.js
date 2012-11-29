@@ -1,5 +1,5 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global define, brackets, $, window, CSSLint */
+/*global define, brackets, $, window, CSSLint, Mustache */
 
 define(function (require, exports, module) {
     'use strict';
@@ -9,8 +9,14 @@ define(function (require, exports, module) {
         EditorManager           = brackets.getModule("editor/EditorManager"),
         DocumentManager         = brackets.getModule("document/DocumentManager"),
         Menus                   = brackets.getModule("command/Menus"),
-        Resizer                 = brackets.getModule("utils/Resizer");
+        PreferencesManager      = brackets.getModule("preferences/PreferencesManager"),
+        Resizer                 = brackets.getModule("utils/Resizer"),
+        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils");
 
+    var panelHtml               = require("text!templates/bottom-panel.html"),
+        tableHtml               = require("text!templates/csslint-table.html"),
+        HEADER_HEIGHT           = 27,
+        defaultPrefs            = { height: 200 };
 
     require("csslint/csslint");
     
@@ -30,27 +36,16 @@ define(function (require, exports, module) {
         messages = results.messages;
                 
         if (results.messages.length) {
-
-            var $csslintTable = $("<table class='zebra-striped condensed-table' style='table-layout: fixed; width: 100%'>").append("<tbody>");
-            $("<tr><th>Line</th><th>Declaration</th><th>Type</th><th>Message</th></tr>").appendTo($csslintTable);
-
             var $selectedRow;
-            
+
+            /*
             results.messages.forEach(function (item) {
-                var makeCell = function (content) {
-                    return $("<td style='word-wrap: break-word' />").text(content);
-                };
 
                 //sometimes line is blank, as is evidence
                 if (!item.line) { item.line = ""; }
                 if (!item.evidence) { item.evidence = ""; }
 
-                var $row = $("<tr/>")
-                            .append(makeCell(item.line))
-                            .append(makeCell(item.evidence))
-                            .append(makeCell(item.type))
-                            .append(makeCell(item.message))
-                            .appendTo($csslintTable);
+
                 $row.click(function () {
                     if ($selectedRow) {
                         $selectedRow.removeClass("selected");
@@ -58,20 +53,36 @@ define(function (require, exports, module) {
                     $row.addClass("selected");
                     $selectedRow = $row;
 
-                    var editor = EditorManager.getCurrentFullEditor();
-                    editor.setCursorPos(item.line - 1, item.col - 1);
-                    EditorManager.focusEditor();
                 });
 
             });
+            */
 
-            $("#csslint .table-container")
+            var html = Mustache.render(tableHtml, {reportList: results.messages});
+
+            $("#csslint .resizable-content")
                 .empty()
-                .append($csslintTable);
-                
+                .append(html);
+            
+            $("#csslint .resizable-content").find("tr").on("click", function (e) {
+                if ($selectedRow) {
+                    $selectedRow.removeClass("selected");
+                }
+
+                $(this).addClass("selected");
+                $selectedRow = $(this);
+                var lineTd = $(this).find("td.line");
+                var line = lineTd.text();
+                var col = lineTd.data("col");
+
+                var editor = EditorManager.getCurrentFullEditor();
+                editor.setCursorPos(line - 1, col - 1);
+                EditorManager.focusEditor();
+
+            });
+
         } else {
-            //todo - tell the user no issues
-            $("#csslint .table-container")
+            $("#csslint .resizable-content")
                 .empty()
                 .append("<p>No issues.</p>");
         }
@@ -98,23 +109,32 @@ define(function (require, exports, module) {
 
     function init() {
         
-        //add the HTML UI
-        var content = '  <div id="csslint" class="bottom-panel">'
-                             + '  <div class="toolbar simple-toolbar-layout">'
-                             + '    <div class="title">CSSLint</div><a href="#" class="close">&times;</a>'
-                             + '  </div>'
-                             + '  <div class="table-container"/>'
-                             + '</div>';
+        var prefs   = PreferencesManager.getPreferenceStorage(module.id, defaultPrefs),
+            height  = prefs.getValue("height"),
+            s,
+            $panel,
+            $panelContent;
 
-        $(content).insertBefore("#status-bar");
+        ExtensionUtils.loadStyleSheet(module, "csslint.css");
 
-        $('#csslint').hide();
-        
+        s = Mustache.render(panelHtml);
+        $(s).insertBefore("#status-bar");
+
+        $panel = $("#csslint");
+        $panelContent = $panel.find(".resizable-content");
+        $panel.hide();
+        $panel.height(height);
+        $panelContent.height(height - HEADER_HEIGHT);
+
         var menu = Menus.getMenu(Menus.AppMenuBar.VIEW_MENU);
         menu.addMenuItem(VIEW_HIDE_CSSLINT, "", Menus.AFTER, "menu-view-sidebar");
 
-        $('#csslint .close').click(function () {
+        $('#csslint .csslint-close').click(function () {
             CommandManager.execute(VIEW_HIDE_CSSLINT);
+        });
+
+        $panel.on("panelResizeEnd", function (event, height) {
+            prefs.setValue("height", height);
         });
 
         // AppInit.htmlReady() has already executed before extensions are loaded

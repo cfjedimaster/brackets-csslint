@@ -6,6 +6,9 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[11/29/2012] Updated display code to fix a few issues with resizing. It also remembers the height now and makes use of Mustache. A HUGE
+thanks, again, to Randy Edmunds. I stole I mean borrowed a lot of code from his shortcut (https://github.com/redmunds/brackets-display-shortcuts).
+
 [11/12/2012] Update code to properly insert the content over the status bar. Also made it resizable.  
 [9/26/2012] Escape HTML in the message. Fix width issue. Thanks to Randy Edmunds for the reports.
 

@@ -1,0 +1,30 @@
+#csslint .resizable-content {
+    height: 175px;
+    overflow: auto;
+}
+
+#csslint .toolbar .csslint-close {
+    font-weight: bold;
+    font-height: 20px;
+    color: #999;
+    float: right;
+    margin-right: 5px;
+}
+
+#csslint .toolbar {
+    display: block;
+}
+
+
+#csslint table td {
+    line-height: 14px;
+    padding: 4px 10px;
+}
+
+#csslint table .csslint-header td {
+    font-weight: bold;
+    background-color: #404040;
+    color: #fff;
+    padding: 4px 10px;
+}
+
