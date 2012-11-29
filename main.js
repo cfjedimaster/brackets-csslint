@@ -38,26 +38,6 @@ define(function (require, exports, module) {
         if (results.messages.length) {
             var $selectedRow;
 
-            /*
-            results.messages.forEach(function (item) {
-
-                //sometimes line is blank, as is evidence
-                if (!item.line) { item.line = ""; }
-                if (!item.evidence) { item.evidence = ""; }
-
-
-                $row.click(function () {
-                    if ($selectedRow) {
-                        $selectedRow.removeClass("selected");
-                    }
-                    $row.addClass("selected");
-                    $selectedRow = $row;
-
-                });
-
-            });
-            */
-
             var html = Mustache.render(tableHtml, {reportList: results.messages});
 
             $("#csslint .resizable-content")
