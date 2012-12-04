@@ -6,6 +6,8 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[12/4/2012] Updated to remove preferences code (not needed) and fix a word wrap issue. Thanks again to Randy Edmunds and Chema Balsas.
+
 [11/29/2012] Updated display code to fix a few issues with resizing. It also remembers the height now and makes use of Mustache. A HUGE
 thanks, again, to Randy Edmunds. I stole I mean borrowed a lot of code from his shortcut (https://github.com/redmunds/brackets-display-shortcuts).
 

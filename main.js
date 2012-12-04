@@ -9,14 +9,12 @@ define(function (require, exports, module) {
         EditorManager           = brackets.getModule("editor/EditorManager"),
         DocumentManager         = brackets.getModule("document/DocumentManager"),
         Menus                   = brackets.getModule("command/Menus"),
-        PreferencesManager      = brackets.getModule("preferences/PreferencesManager"),
         Resizer                 = brackets.getModule("utils/Resizer"),
         ExtensionUtils          = brackets.getModule("utils/ExtensionUtils");
 
     var panelHtml               = require("text!templates/bottom-panel.html"),
         tableHtml               = require("text!templates/csslint-table.html"),
-        HEADER_HEIGHT           = 27,
-        defaultPrefs            = { height: 200 };
+        HEADER_HEIGHT           = 27;
 
     require("csslint/csslint");
     
@@ -89,22 +87,12 @@ define(function (require, exports, module) {
 
     function init() {
         
-        var prefs   = PreferencesManager.getPreferenceStorage(module.id, defaultPrefs),
-            height  = prefs.getValue("height"),
-            s,
-            $panel,
-            $panelContent;
+        var s;
 
         ExtensionUtils.loadStyleSheet(module, "csslint.css");
 
         s = Mustache.render(panelHtml);
         $(s).insertBefore("#status-bar");
-
-        $panel = $("#csslint");
-        $panelContent = $panel.find(".resizable-content");
-        $panel.hide();
-        $panel.height(height);
-        $panelContent.height(height - HEADER_HEIGHT);
 
         var menu = Menus.getMenu(Menus.AppMenuBar.VIEW_MENU);
         menu.addMenuItem(VIEW_HIDE_CSSLINT, "", Menus.AFTER, "menu-view-sidebar");
@@ -113,9 +101,6 @@ define(function (require, exports, module) {
             CommandManager.execute(VIEW_HIDE_CSSLINT);
         });
 
-        $panel.on("panelResizeEnd", function (event, height) {
-            prefs.setValue("height", height);
-        });
 
         // AppInit.htmlReady() has already executed before extensions are loaded
         // so, for now, we need to call this ourself
