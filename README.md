@@ -6,6 +6,8 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[4/16/2013] Tweak to menu add
+
 [12/4/2012] Updated to remove preferences code (not needed) and fix a word wrap issue. Thanks again to Randy Edmunds and Chema Balsas.
 
 [11/29/2012] Updated display code to fix a few issues with resizing. It also remembers the height now and makes use of Mustache. A HUGE

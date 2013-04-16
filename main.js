@@ -95,7 +95,7 @@ define(function (require, exports, module) {
         $(s).insertBefore("#status-bar");
 
         var menu = Menus.getMenu(Menus.AppMenuBar.VIEW_MENU);
-        menu.addMenuItem(VIEW_HIDE_CSSLINT, "", Menus.AFTER, "menu-view-sidebar");
+        menu.addMenuItem(VIEW_HIDE_CSSLINT, "", Menus.AFTER);
 
         $('#csslint .csslint-close').click(function () {
             CommandManager.execute(VIEW_HIDE_CSSLINT);
