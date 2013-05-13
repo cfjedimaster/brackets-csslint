@@ -5,7 +5,7 @@
 
 #csslint .toolbar .csslint-close {
     font-weight: bold;
-    font-height: 20px;
+    font-size: 20px;
     color: #999;
     float: right;
     margin-right: 5px;
