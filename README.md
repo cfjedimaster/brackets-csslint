@@ -6,6 +6,8 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[5/24/2013] package.json support
+
 [4/16/2013] Tweak to menu add
 
 [12/4/2012] Updated to remove preferences code (not needed) and fix a word wrap issue. Thanks again to Randy Edmunds and Chema Balsas.
