@@ -6,6 +6,9 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[6/2/2013] Ugh, had the wrong package.json stuff in. Stupid Ray. Also updated code to use
+PanelManager.
+
 [6/2/2013] Makes csslint work like my jshint extension and auto hide/show on .css files.
 
 [5/24/2013] package.json support
