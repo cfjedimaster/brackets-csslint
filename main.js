@@ -44,7 +44,7 @@ define(function (require, exports, module) {
 			return;
 		}
 
-		if(!isCSSDoc(editor.document)) {
+		if (!isCSSDoc(editor.document)) {
 			$csslint.hide();
 			EditorManager.resizeEditor();
 			return;
@@ -91,7 +91,7 @@ define(function (require, exports, module) {
 	}
 
 	function _handleShowCSSLint() {
-		if(cssLintEnabled) {
+		if (cssLintEnabled) {
 			cssLintEnabled = false;
 			CommandManager.get(VIEW_HIDE_CSSLINT).setChecked(false);
 			$(DocumentManager).off("currentDocumentChange documentSaved", null,  _handleLint);
@@ -117,7 +117,7 @@ define(function (require, exports, module) {
 
 		s = Mustache.render(panelHtml);
 
-		$csslint = PanelManager.createBottomPanel("csslint.display.csslint",$(s),200);
+		$csslint = PanelManager.createBottomPanel("csslint.display.csslint", $(s), 200);
 
 		var menu = Menus.getMenu(Menus.AppMenuBar.VIEW_MENU);
 		menu.addMenuItem(VIEW_HIDE_CSSLINT, "", Menus.AFTER);
