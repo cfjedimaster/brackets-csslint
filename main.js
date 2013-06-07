@@ -4,21 +4,22 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var Commands                = brackets.getModule("command/Commands"),
+	var AppInit                 = brackets.getModule("utils/AppInit"),
+        Commands                = brackets.getModule("command/Commands"),
 		CommandManager          = brackets.getModule("command/CommandManager"),
-		EditorManager           = brackets.getModule("editor/EditorManager"),
 		DocumentManager         = brackets.getModule("document/DocumentManager"),
-        AppInit                 = brackets.getModule("utils/AppInit"),
+        EditorManager           = brackets.getModule("editor/EditorManager"),
+		ExtensionUtils          = brackets.getModule("utils/ExtensionUtils"),
+        LanguageManager         = brackets.getModule("language/LanguageManager"),
 		Menus                   = brackets.getModule("command/Menus"),
-		PanelManager			= brackets.getModule("view/PanelManager"),
-		ExtensionUtils          = brackets.getModule("utils/ExtensionUtils");
+		PanelManager			= brackets.getModule("view/PanelManager");
 
 	var panelHtml               = require("text!templates/bottom-panel.html"),
 		tableHtml               = require("text!templates/csslint-table.html");
 
 	require("csslint/csslint");
 
-	//commands
+	// Commands
 	var VIEW_HIDE_CSSLINT = "csslint.run";
 
 	//Determines if we are enabled or not. Previously we based this on if we could
@@ -29,13 +30,14 @@ define(function (require, exports, module) {
 
 	function isCSSDoc(fileEntry) {
 		var filename = fileEntry.file.name;
-		var ext = filename.split(".").pop();
-		//maybe in the future SASS/LESS
-		return (ext === "css");
+		var language = LanguageManager.getLanguageForPath(fileEntry);
+		// Maybe in the future LESS
+		return (language === "css" || language === "sass");
 	}
 
 	function _handleLint() {
-		var messages, results;
+		var messages,
+            results;
 
 		var editor = EditorManager.getCurrentFullEditor();
 		if (!editor) {
@@ -95,7 +97,7 @@ define(function (require, exports, module) {
 			cssLintEnabled = false;
 			CommandManager.get(VIEW_HIDE_CSSLINT).setChecked(false);
 			$(DocumentManager).off("currentDocumentChange documentSaved", null,  _handleLint);
-			//if visible, hide
+			// if visible, hide
 			$csslint.hide();
 			EditorManager.resizeEditor();
 
