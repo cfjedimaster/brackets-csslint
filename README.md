@@ -6,6 +6,8 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[6/22/2013] Merged in an updated CSSLint by John Lafitte.
+
 [6/7/2013] Updated package.json version for fixes by Daniel Seymour.
 
 [6/5/2013] Fixed a bunch of JSLint errors in csslint.js.
