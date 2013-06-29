@@ -29,7 +29,6 @@ define(function (require, exports, module) {
 	var $csslint;
 
 	function isCSSDoc(fileEntry) {
-		var filename = fileEntry.file.name;
 		var language = LanguageManager.getLanguageForPath(fileEntry);
 		// Maybe in the future LESS
 		return (language === "css" || language === "sass");
