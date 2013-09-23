@@ -31,7 +31,7 @@ define(function (require, exports, module) {
 	function isCSSDoc(fileEntry) {
 		var language = LanguageManager.getLanguageForPath(fileEntry);
 		// Maybe in the future LESS
-		return (language === "css" || language === "sass");
+		return (language.getId() === "css" || language.getId() === "sass");
 	}
 
 	function _handleLint() {
