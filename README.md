@@ -6,6 +6,8 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[9/23/2013] New linting API used for Sprint 31.
+
 [6/30/2013] Merged in a fix by Daniel Seymour.
 
 [6/22/2013] Merged in an updated CSSLint by John Lafitte.

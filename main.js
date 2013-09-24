@@ -5,127 +5,48 @@ define(function (require, exports, module) {
 	'use strict';
 
 	var AppInit                 = brackets.getModule("utils/AppInit"),
-        Commands                = brackets.getModule("command/Commands"),
-		CommandManager          = brackets.getModule("command/CommandManager"),
-		DocumentManager         = brackets.getModule("document/DocumentManager"),
-        EditorManager           = brackets.getModule("editor/EditorManager"),
-		ExtensionUtils          = brackets.getModule("utils/ExtensionUtils"),
-        LanguageManager         = brackets.getModule("language/LanguageManager"),
-		Menus                   = brackets.getModule("command/Menus"),
-		PanelManager			= brackets.getModule("view/PanelManager");
-
-	var panelHtml               = require("text!templates/bottom-panel.html"),
-		tableHtml               = require("text!templates/csslint-table.html");
+		CodeInspection			= brackets.getModule("language/CodeInspection");
 
 	require("csslint/csslint");
 
-	// Commands
-	var VIEW_HIDE_CSSLINT = "csslint.run";
+	function cssLinter(text, fullPath) {
+		var results;
 
-	//Determines if we are enabled or not. Previously we based this on if we could
-	//see the panel, but now the panel will be hidden on non-CSS files
-	var cssLintEnabled = false;
-
-	var $csslint;
-
-	function isCSSDoc(fileEntry) {
-		var language = LanguageManager.getLanguageForPath(fileEntry);
-		// Maybe in the future LESS
-		return (language.getId() === "css" || language.getId() === "sass");
-	}
-
-	function _handleLint() {
-		var messages,
-            results;
-
-		var editor = EditorManager.getCurrentFullEditor();
-		if (!editor) {
-			$csslint.hide();
-			EditorManager.resizeEditor();
-			return;
-		}
-
-		if (!isCSSDoc(editor.document)) {
-			$csslint.hide();
-			EditorManager.resizeEditor();
-			return;
-		} else {
-			$csslint.show();
-			EditorManager.resizeEditor();
-		}
-
-		var text = editor.document.getText();
 		results = CSSLint.verify(text);
-		messages = results.messages;
 
 		if (results.messages.length) {
-			var $selectedRow;
+			var result = { errors: [] };
 
-			var html = Mustache.render(tableHtml, {reportList: results.messages});
+			for(var i=0, len=results.messages.length; i<len; i++) {
+				var messageOb = results.messages[i];
+				//default
+				var type = CodeInspection.Type.WARNING;
 
-			$("#csslint .resizable-content")
-				.empty()
-				.append(html);
-
-			$("#csslint .resizable-content").find("tr").on("click", function (e) {
-				if ($selectedRow) {
-					$selectedRow.removeClass("selected");
+				if(messageOb.type === "error") {
+					type = CodeInspection.Type.ERROR;
+				} else if(messageOb.type === "warning") {
+					type = CodeInspection.Type.WARNING;
 				}
 
-				$(this).addClass("selected");
-				$selectedRow = $(this);
-				var lineTd = $(this).find("td.line");
-				var line = lineTd.text();
-				var col = lineTd.data("col");
+				result.errors.push({
+					pos: {line:messageOb.line-1, ch:messageOb.col},
+					message:messageOb.message,
+					type:type
+				});
+			}
 
-				var editor = EditorManager.getCurrentFullEditor();
-				editor.setCursorPos(line - 1, col - 1);
-				EditorManager.focusEditor();
-
-			});
-
+			return result;
 		} else {
-			$("#csslint .resizable-content")
-				.empty()
-				.append("<p>No issues.</p>");
-		}
-	}
-
-	function _handleShowCSSLint() {
-		if (cssLintEnabled) {
-			cssLintEnabled = false;
-			CommandManager.get(VIEW_HIDE_CSSLINT).setChecked(false);
-			$(DocumentManager).off("currentDocumentChange documentSaved", null,  _handleLint);
-			// if visible, hide
-			$csslint.hide();
-			EditorManager.resizeEditor();
-
-		} else {
-			cssLintEnabled = true;
-			CommandManager.get(VIEW_HIDE_CSSLINT).setChecked(true);
-			$(DocumentManager).on("currentDocumentChange documentSaved", _handleLint);
-			_handleLint();
+			//no errors
+			return null;
 		}
 
 	}
 
-	CommandManager.register("Enable CSSLint", VIEW_HIDE_CSSLINT, _handleShowCSSLint);
-
-    AppInit.htmlReady(function () {
-		var s;
-
-		ExtensionUtils.loadStyleSheet(module, "csslint.css");
-
-		s = Mustache.render(panelHtml);
-
-		$csslint = PanelManager.createBottomPanel("csslint.display.csslint", $(s), 200);
-
-		var menu = Menus.getMenu(Menus.AppMenuBar.VIEW_MENU);
-		menu.addMenuItem(VIEW_HIDE_CSSLINT, "", Menus.AFTER);
-
-
-		$('#csslint .csslint-close').click(function () {
-			CommandManager.execute(VIEW_HIDE_CSSLINT);
+    AppInit.appReady(function () {
+		CodeInspection.register("css", {
+			name: "CSSLint",
+			scanFile: cssLinter
 		});
 
     });
