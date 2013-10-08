@@ -6,6 +6,13 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[10/8/2013] Two things. One - sometimes CSSLint returned a "document" level warning. Brackets Lint API doesn't
+support this, so for now, we skip it.
+
+Two - SCSS support is in, but I'm fairly certain it isn't working right. I'll probably remove it.
+
+Third - updated CSSLint to latest.
+
 [10/8/2013] Small mod to fix a loading issue with linting (temp)
 
 [9/23/2013] New linting API used for Sprint 31.

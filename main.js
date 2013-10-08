@@ -18,7 +18,14 @@ define(function (require, exports, module) {
 			var result = { errors: [] };
 
 			for(var i=0, len=results.messages.length; i<len; i++) {
+
+				/*
+				Currently the Brackets Lint API doesn't work with warnings that are 'document' level.
+				See bug: https://github.com/adobe/brackets/issues/5452
+				*/
 				var messageOb = results.messages[i];
+
+				if(!messageOb.line) continue;
 				//default
 				var type = CodeInspection.Type.WARNING;
 
@@ -27,7 +34,6 @@ define(function (require, exports, module) {
 				} else if(messageOb.type === "warning") {
 					type = CodeInspection.Type.WARNING;
 				}
-					console.log(messageOb);
 
 				result.errors.push({
 					pos: {line:messageOb.line-1, ch:messageOb.col},
