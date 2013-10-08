@@ -6,6 +6,8 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[10/8/2013] Small mod to fix a loading issue with linting (temp)
+
 [9/23/2013] New linting API used for Sprint 31.
 
 [6/30/2013] Merged in a fix by Daniel Seymour.

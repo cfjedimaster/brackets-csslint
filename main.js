@@ -27,10 +27,12 @@ define(function (require, exports, module) {
 				} else if(messageOb.type === "warning") {
 					type = CodeInspection.Type.WARNING;
 				}
+					console.log(messageOb);
 
 				result.errors.push({
 					pos: {line:messageOb.line-1, ch:messageOb.col},
 					message:messageOb.message,
+					
 					type:type
 				});
 			}
@@ -43,12 +45,18 @@ define(function (require, exports, module) {
 
 	}
 
-    AppInit.appReady(function () {
-		CodeInspection.register("css", {
-			name: "CSSLint",
-			scanFile: cssLinter
-		});
+	CodeInspection.register("css", {
+		name: "CSSLint",
+		scanFile: cssLinter
+	});
+	CodeInspection.register("scss", {
+		name: "CSSLint",
+		scanFile: cssLinter
+	});
 
-    });
+	//This is a workaround due to some loading issues in Sprint 31. 
+	//See bug for details: https://github.com/adobe/brackets/issues/5442
+	CodeInspection.toggleEnabled();
+	CodeInspection.toggleEnabled();
 
 });
