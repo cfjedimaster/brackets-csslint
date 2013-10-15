@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 */
 /* Build: v0.10.0 15-August-2013 01:07:22 */
-var exports = exports || {};
+//var exports = exports || {};
 var CSSLint = (function(){
 /*!
 Parser-Lib
@@ -6421,14 +6421,14 @@ ValidationError     :ValidationError
 })();
 
 
-
+/*
 
 (function(){
 for(var prop in parserlib){
 exports[prop] = parserlib[prop];
 }
 })();
-
+*/
 
 /**
  * Main CSSLint object.

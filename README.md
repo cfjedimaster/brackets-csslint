@@ -6,6 +6,9 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[10/15/2013] So - the main CSSLint lib I used totally screwed up Brackets by messing up the exports module. I did
+some guess work and - I think it's kosher now.
+
 [10/8/2013] Two things. One - sometimes CSSLint returned a "document" level warning. Brackets Lint API doesn't
 support this, so for now, we skip it.
 
