@@ -16,7 +16,7 @@ define(function (require, exports, module) {
 
 		if (results.messages.length) {
 			var result = { errors: [] };
-console.log(results.messages);
+
 			for(var i=0, len=results.messages.length; i<len; i++) {
 
 				/*
@@ -37,7 +37,7 @@ console.log(results.messages);
 
 				var message = messageOb.rule.name + " - " + messageOb.message;
 				message += " (" + messageOb.rule.id + ")";
-				
+
 				result.errors.push({
 					pos: {line:messageOb.line-1, ch:messageOb.col},
 					message:message,
