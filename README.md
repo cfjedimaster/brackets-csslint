@@ -6,6 +6,8 @@ When installed, you can enable CSSLint by clicking 'Enable CSSLint' in your View
 
 Issues/Updates
 =====
+[11/29/2013] Updated the display to include both the name of the rule, which makes it a bit clearer I think, as well as the code for the rule.
+
 [10/15/2013] So - the main CSSLint lib I used totally screwed up Brackets by messing up the exports module. I did
 some guess work and - I think it's kosher now.
 
