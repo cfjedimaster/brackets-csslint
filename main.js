@@ -134,10 +134,6 @@ define(function (require, exports, module) {
             name: "CSSLint",
             scanFile: cssLinter
         });
-        CodeInspection.register("scss", {
-            name: "CSSLint",
-            scanFile: cssLinter
-        });
 
         $(DocumentManager)
             .on("documentSaved.csslint documentRefreshed.csslint", function (e, document) {
