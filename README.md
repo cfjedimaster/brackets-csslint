@@ -12,6 +12,8 @@ CSSLint also supports .csslintrc files. See this for more information: https://g
 
 Issues/Updates
 =====
+[1/4/2015] Updated CSSLint - again - this time credit goes to @ArgTang
+
 [1/4/2015] Updated CSSLint
 
 [7/13/2014] Remove SCSS support, as I thought I'd need to.
