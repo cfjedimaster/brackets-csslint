@@ -12,6 +12,8 @@ CSSLint also supports .csslintrc files. See this for more information: https://g
 
 Issues/Updates
 =====
+[1/22/2015] Fix for CSSLint behaving badly.
+
 [1/4/2015] Updated CSSLint - again - this time credit goes to @ArgTang
 
 [1/4/2015] Updated CSSLint

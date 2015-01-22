@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 */
 /* Build: v0.10.0 04-January-2015 04:48:00 */
-var exports = exports || {};
+//var exports = exports || {};
 var CSSLint = (function(){
 /*!
 Parser-Lib
@@ -6546,13 +6546,13 @@ Tokens              :Tokens,
 ValidationError     :ValidationError
 };
 })();
-
+/*
 (function(){
 for(var prop in parserlib){
 exports[prop] = parserlib[prop];
 }
 })();
-
+*/
 'use strict';
 
 function objectToString(o) {
