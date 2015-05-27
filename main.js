@@ -8,7 +8,18 @@ define(function (require, exports, module) {
 		CodeInspection			= brackets.getModule("language/CodeInspection"),
 		DocumentManager         = brackets.getModule("document/DocumentManager"),
 		FileSystem              = brackets.getModule("filesystem/FileSystem"),
-		ProjectManager          = brackets.getModule("project/ProjectManager");
+		ProjectManager          = brackets.getModule("project/ProjectManager"),
+		PreferencesManager      = brackets.getModule("preferences/PreferencesManager");
+
+	var pm = PreferencesManager.getExtensionPrefs("csslint"),
+		defaults;
+
+	pm.definePreference("options", "object", {})
+		.on("change", function () {
+			defaults = pm.get("options");
+		});
+
+	defaults = pm.get("options");
 
 	require("csslint/csslint");
 
@@ -19,7 +30,7 @@ define(function (require, exports, module) {
 		var results;
 
 		// Merge default CSSLint ruleset with the custom .csslintrc config
-		var ruleset = $.extend(CSSLint.getRuleset(), config.options);
+		var ruleset = $.extend(CSSLint.getRuleset(), defaults, config.options);
 
 		// Execute CSSLint
 		results = CSSLint.verify(text, ruleset);
