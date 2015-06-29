@@ -146,7 +146,7 @@ define(function (require, exports, module) {
             scanFile: cssLinter
         });
 
-        $(DocumentManager)
+        DocumentManager
             .on("documentSaved.csslint documentRefreshed.csslint", function (e, document) {
                 // if this project's .csslintrc config has been updated, reload
                 if (document.file.fullPath === ProjectManager.getProjectRoot().fullPath + _configFileName) {
@@ -154,7 +154,7 @@ define(function (require, exports, module) {
                 }
             });
 
-        $(ProjectManager)
+       ProjectManager
             .on("projectOpen.csslint", function () {
                 tryLoadConfig();
             });
