@@ -9,7 +9,8 @@ define(function (require, exports, module) {
 		DocumentManager         = brackets.getModule("document/DocumentManager"),
 		FileSystem              = brackets.getModule("filesystem/FileSystem"),
 		ProjectManager          = brackets.getModule("project/ProjectManager"),
-		PreferencesManager      = brackets.getModule("preferences/PreferencesManager");
+		PreferencesManager      = brackets.getModule("preferences/PreferencesManager"),
+		LanguageManager         = brackets.getModule("language/LanguageManager");
 
 	var pm = PreferencesManager.getExtensionPrefs("csslint"),
 		defaults;
@@ -140,6 +141,8 @@ define(function (require, exports, module) {
     }
 
     AppInit.appReady(function () {
+
+        LanguageManager.getLanguage("json").addFileName(_configFileName);
 
         CodeInspection.register("css", {
             name: "CSSLint",
