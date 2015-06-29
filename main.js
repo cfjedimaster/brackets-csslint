@@ -1,83 +1,88 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global define, brackets, $, window, CSSLint, Mustache */
+/*global define, brackets, $, CSSLint */
 
 define(function (require, exports, module) {
-	'use strict';
+    "use strict";
 
-	var AppInit                 = brackets.getModule("utils/AppInit"),
-		CodeInspection			= brackets.getModule("language/CodeInspection"),
-		DocumentManager         = brackets.getModule("document/DocumentManager"),
-		FileSystem              = brackets.getModule("filesystem/FileSystem"),
-		ProjectManager          = brackets.getModule("project/ProjectManager"),
-		PreferencesManager      = brackets.getModule("preferences/PreferencesManager"),
-		LanguageManager         = brackets.getModule("language/LanguageManager");
+    var DocumentManager    = brackets.getModule("document/DocumentManager"),
+        FileSystem         = brackets.getModule("filesystem/FileSystem"),
+        CodeInspection     = brackets.getModule("language/CodeInspection"),
+        LanguageManager    = brackets.getModule("language/LanguageManager"),
+        PreferencesManager = brackets.getModule("preferences/PreferencesManager"),
+        ProjectManager     = brackets.getModule("project/ProjectManager"),
+        AppInit            = brackets.getModule("utils/AppInit");
 
-	var pm = PreferencesManager.getExtensionPrefs("csslint"),
-		defaults;
+    var pm = PreferencesManager.getExtensionPrefs("csslint"),
+        defaults;
 
-	pm.definePreference("options", "object", {})
-		.on("change", function () {
-			defaults = pm.get("options");
-		});
+    pm.definePreference("options", "object", {})
+        .on("change", function () {
+            defaults = pm.get("options");
+        });
 
-	defaults = pm.get("options");
+    defaults = pm.get("options");
 
-	require("csslint/csslint");
+    require("csslint/csslint");
 
-	var _configFileName = ".csslintrc",
-		config = {};
+    var _configFileName = ".csslintrc",
+        config = {};
 
-	function cssLinter(text, fullPath) {
-		var results;
+    function cssLinter(text) {
+        var results;
 
-		// Merge default CSSLint ruleset with the custom .csslintrc config
-		var ruleset = $.extend(CSSLint.getRuleset(), defaults, config.options);
+        // Merge default CSSLint ruleset with the custom .csslintrc config
+        var ruleset = $.extend(CSSLint.getRuleset(), defaults, config.options);
 
-		// Execute CSSLint
-		results = CSSLint.verify(text, ruleset);
+        // Execute CSSLint
+        results = CSSLint.verify(text, ruleset);
 
-		if (results.messages.length) {
-			var result = { errors: [] };
+        if (results.messages.length) {
+            var result = {
+                errors: []
+            };
 
-			for(var i=0, len=results.messages.length; i<len; i++) {
+            for (var i = 0, len = results.messages.length; i < len; i++) {
 
-				/*
-				Currently the Brackets Lint API doesn't work with warnings that are 'document' level.
-				See bug: https://github.com/adobe/brackets/issues/5452
-				*/
-				var messageOb = results.messages[i];
+                /*
+                Currently the Brackets Lint API doesn't work with warnings that are 'document' level.
+                See bug: https://github.com/adobe/brackets/issues/5452
+                */
+                var messageOb = results.messages[i];
 
-				if(!messageOb.line) continue;
-				//default
-				var type = CodeInspection.Type.WARNING;
+                if (!messageOb.line) continue;
+                //default
+                var type = CodeInspection.Type.WARNING;
 
-				if(messageOb.type === "error") {
-					type = CodeInspection.Type.ERROR;
-				} else if(messageOb.type === "warning") {
-					type = CodeInspection.Type.WARNING;
-				}
+                if (messageOb.type === "error") {
+                    type = CodeInspection.Type.ERROR;
+                } else if (messageOb.type === "warning") {
+                    type = CodeInspection.Type.WARNING;
+                }
 
-				var message = messageOb.rule.name + " - " + messageOb.message;
-				message += " (" + messageOb.rule.id + ")";
+                var message = messageOb.rule.name + " - " + messageOb.message;
+                message += " (" + messageOb.rule.id + ")";
 
-				result.errors.push({
-					pos: {line:messageOb.line-1, ch:messageOb.col},
-					message:message,
+                result.errors.push({
+                    pos: {
+                        line: messageOb.line - 1,
+                        ch: messageOb.col
+                    },
+                    message: message,
 
-					type:type
-				});
-			}
+                    type: type
+                });
+            }
 
-			return result;
-		} else {
-			//no errors
-			return null;
-		}
+            return result;
+        } else {
+            //no errors
+            return null;
+        }
 
-	}
+    }
 
 
-	/**
+    /**
      * Loads project-wide CSSLint configuration.
      *
      * CSSLint project file should be located at <Project Root>/.csslintrc. It
@@ -98,7 +103,7 @@ define(function (require, exports, module) {
         file.read(function (err, content) {
             if (!err) {
                 var cfg = {};
-		try {
+                try {
                     config = JSON.parse(content);
                 } catch (e) {
                     console.error("CSSLint: Error parsing " + file.fullPath + ". Details: " + e);
@@ -119,7 +124,7 @@ define(function (require, exports, module) {
      */
     function tryLoadConfig() {
         /**
-         * Makes sure JSHint is re-ran when the config is reloaded
+         * Makes sure CSSLint is re-ran when the config is reloaded
          *
          * This is a workaround due to some loading issues in Sprint 31.
          * See bug for details: https://github.com/adobe/brackets/issues/5442
@@ -157,7 +162,7 @@ define(function (require, exports, module) {
                 }
             });
 
-       ProjectManager
+        ProjectManager
             .on("projectOpen.csslint", function () {
                 tryLoadConfig();
             });
