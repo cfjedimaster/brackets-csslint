@@ -14,6 +14,8 @@ CSSLint also supports .csslintrc files. See this for more information: https://g
 
 Issues/Updates
 =====
+[6/30/2015] Merge PR - https://github.com/cfjedimaster/brackets-csslint/pull/43
+
 [5/27/2015] Adding support for global preferences
 
 [1/22/2015] Fix for CSSLint behaving badly.
