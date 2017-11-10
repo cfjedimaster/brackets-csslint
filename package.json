@@ -3,7 +3,7 @@
     "title": "CSSLint",
     "description": "Adds CSSLint support to Brackets.",
     "homepage": "https://github.com/cfjedimaster/brackets-csslint",
-    "version": "2.0.21",
+    "version": "2.0.22",
     "author": "Raymond Camden <raymondcamden@gmail.com> (http://www.raymondcamden.com)",
     "license": "MIT",
     "engines": {
